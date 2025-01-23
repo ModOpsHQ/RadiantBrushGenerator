@@ -1,0 +1,16 @@
+iwmap 4
+"000_Global" flags  active
+"The Map" flags 
+// entity 0
+{
+"classname" "worldspawn"
+// brush 0
+{
+ ( 0 64 40 ) ( 0 64 -32 ) ( 0 -64 -32 ) berlin_roof_wood_dirty 64 128 96 64 -90 0 lightmap_gray 16384 -16384 -96 0 90 0
+ ( -8 -64 -32 ) ( -8 64 -32 ) ( -8 64 40 ) berlin_roof_wood_dirty 64 128 96 64 -90 0 lightmap_gray 16384 -16384 -96 0 90 0
+ ( -8 -64 -40 ) ( -8 -64 32 ) ( 0 -64 32 ) berlin_roof_wood_dirty 64 -128 96 -64 -90 0 lightmap_gray 16384 16384 -96 0 90 0
+ ( -8 -64 32 ) ( -8 64 32 ) ( 0 64 32 ) berlin_roof_wood_dirty 64 -128 96 -64 -90 0 lightmap_gray 16384 16384 0 0 90 0
+ ( -8 64 40 ) ( -8 64 -32 ) ( 0 64 -32 ) berlin_roof_wood_dirty 64 -128 96 -64 -90 0 lightmap_gray 16384 16384 -96 0 90 0
+ ( -8 64 -32 ) ( -8 -64 -32 ) ( 0 -64 -32 ) berlin_roof_wood_dirty 64 -128 96 -64 -90 0 lightmap_gray 16384 16384 0 0 90 0
+}
+}
