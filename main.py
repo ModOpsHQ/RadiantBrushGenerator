@@ -1,18 +1,48 @@
 import os
-
 from src.core.create_brush import create_brush
 from src.core.create_map_file import create_map_file
 
-file = "s32_64_8_p0_0_0_r90_0_0_test2.map"
+file = "view_test.map"
 dir = r"D:\SteamLibrary\steamapps\common\Call of Duty World at War\map_source\brush_tests\python"
 path = dir + "\\" + file
 os.makedirs(dir, exist_ok=True)
 
 def main():
-    # Create two brushes at different world positions
+    # Create a brush with textures that match Radiant's 2D views
     create_map_file([
-        # create_brush(32,32,32, "berlin_roof_wood_dirty", position=(0,0,0), rotation=(0,0,0)),
-        create_brush(32,64,8, "berlin_roof_wood_dirty", position=(0,0,0), rotation=(90,0,0)),
+        create_brush(32,64,8, [
+            "caulk",                        # Bottom (visible in top view)
+            "berlin_roof_wood_dirty",       # Top (visible in top view)
+            "atoll_ship_metal_rust2",       # Back (visible in front view, far)
+            "atoll_ship_metal_rust1",       # Right (visible in side view)
+            "berlin_ceiling_concrete_tile", # Front (visible in front view, near)
+            "atoll_ship_metal_ribs_blend"   # Left (visible in side view)
+        ], position=(0,0,0), rotation=(0,0,0)),
+        create_brush(32,64,8, [
+            "caulk",                        # Bottom (visible in top view)
+            "berlin_roof_wood_dirty",       # Top (visible in top view)
+            "atoll_ship_metal_rust2",       # Back (visible in front view, far)
+            "atoll_ship_metal_rust1",       # Right (visible in side view)
+            "berlin_ceiling_concrete_tile", # Front (visible in front view, near)
+            "atoll_ship_metal_ribs_blend"   # Left (visible in side view)
+        ], position=(256,0,0), rotation=(0,0,0)),
+        create_brush(32,64,8, [
+            "caulk",                        # Bottom (visible in top view)
+            "berlin_roof_wood_dirty",       # Top (visible in top view)
+            "atoll_ship_metal_rust2",       # Back (visible in front view, far)
+            "atoll_ship_metal_rust1",       # Right (visible in side view)
+            "berlin_ceiling_concrete_tile", # Front (visible in front view, near)
+            "atoll_ship_metal_ribs_blend"   # Left (visible in side view)
+        ], position=(0,256,0), rotation=(0,0,0)),
+        create_brush(32,64,8, [
+            "caulk",                        # Bottom (visible in top view)
+            "berlin_roof_wood_dirty",       # Top (visible in top view)
+            "atoll_ship_metal_rust2",       # Back (visible in front view, far)
+            "atoll_ship_metal_rust1",       # Right (visible in side view)
+            "berlin_ceiling_concrete_tile", # Front (visible in front view, near)
+            "atoll_ship_metal_ribs_blend"   # Left (visible in side view)
+        ], position=(0,0,256), rotation=(0,0,0))
+
     ], path)
 
 if __name__ == "__main__":

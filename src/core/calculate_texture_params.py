@@ -1,4 +1,6 @@
 from typing import Tuple
+import math
+from .vector_math import normalize, cross, dot, closest_axis
 
 def calculate_texture_params(face_normal: Tuple[int, int, int], 
                            dimensions: Tuple[float, float, float],
@@ -6,6 +8,7 @@ def calculate_texture_params(face_normal: Tuple[int, int, int],
                            rotation: Tuple[float, float, float]) -> str:
     """
     Calculate texture parameters based on face orientation and brush properties.
+    Using Hammertime's texture alignment approach.
     
     Args:
         face_normal: Normal vector of the face (determines orientation)
@@ -13,38 +16,52 @@ def calculate_texture_params(face_normal: Tuple[int, int, int],
         position: World position of the brush
         rotation: (x, y, z) rotation in degrees
     """
+    # Normalize the face normal
+    normal = normalize(face_normal)
+    
+    # Get closest major axis to this normal
+    axis = closest_axis(normal)
+    
+    # Pick temporary vector based on closest axis
+    # If closest is Z, use -Y, otherwise use -Z
+    if axis[2] != 0:  # If Z is dominant
+        temp_v = (0, -1, 0)  # -Y
+    else:
+        temp_v = (0, 0, -1)  # -Z
+    
+    # Calculate texture axes
+    u_axis = normalize(cross(normal, temp_v))  # U = normal × temp
+    v_axis = normalize(cross(u_axis, normal))  # V = U × normal
+    
+    # Calculate scale based on brush dimensions
     width, length, height = dimensions
-    
-    # Scale is based on brush dimensions
-    scale_x = width
-    scale_y = -height  # Negative because Radiant uses opposite Y direction
-    
-    # Offset is half of the dimensions
-    offset_x = width/2
-    offset_y = -height/2  # Negative to match Radiant's coordinate system
-    
-    # Calculate texture rotation based on face normal and brush rotation
-    rx, ry, rz = rotation
-    
-    # Base rotation is 180 for standard orientation
-    tex_rotation = 180
-    
-    # Adjust texture rotation based on which face it is and the brush rotation
     if face_normal[2] != 0:  # Top/Bottom faces
-        tex_rotation = (tex_rotation + rz) % 360  # Z rotation affects top/bottom faces
+        scale_x = width
+        scale_y = -length
     elif face_normal[0] != 0:  # Left/Right faces
-        tex_rotation = (tex_rotation + ry) % 360  # Y rotation affects side faces
+        scale_x = length
+        scale_y = -height
     else:  # Front/Back faces
-        tex_rotation = (tex_rotation + rx) % 360  # X rotation affects front/back
+        scale_x = width
+        scale_y = -height
     
-    # Lightmap offsets based on face orientation
-    if face_normal[0] != 0:  # X-facing faces
-        lightmap_x = 0
-        lightmap_y = 0
-        lightmap_z = 0
-    else:  # Y and Z facing faces
-        lightmap_x = -width * 3  # Proportional to brush width
-        lightmap_y = 0
-        lightmap_z = 0
+    # Calculate texture shift to center texture
+    if face_normal[2] != 0:
+        offset_x = width/2
+        offset_y = -length/2
+    elif face_normal[0] != 0:
+        offset_x = length/2
+        offset_y = -height/2
+    else:
+        offset_x = width/2
+        offset_y = -height/2
+    
+    # Apply rotation based on texture axes
+    tex_rotation = 0  # Let the texture axes handle rotation
+    
+    # Lightmap parameters
+    lightmap_x = 0
+    lightmap_y = 0
+    lightmap_z = 0
     
     return f"{scale_x} {scale_y} {offset_x} {offset_y} {tex_rotation} 0 lightmap_gray 16384 16384 {lightmap_x} {lightmap_y} {lightmap_z} 0"
